@@ -11,7 +11,6 @@ import logger from 'morgan';
 import sassMiddleware from 'node-sass-middleware';
 import { ExpressDataApplication, serviceRouter, dateReviver } from '@themost/express';
 import indexRouter from './routes/index';
-import usersRouter from './routes/users';
 
 /**
  * @name Request#context
@@ -72,13 +71,11 @@ app.use(sassMiddleware({
 app.use(express.static(path.join(process.cwd(), 'public')));
 
 app.use('/', indexRouter);
-
-app.use('/users', usersRouter);
 // use @themost/express service router
 app.use('/api', serviceRouter);
 
 // error handler
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
